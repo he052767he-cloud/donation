@@ -8,7 +8,7 @@
         body { font-family: system-ui, -apple-system, sans-serif; text-align: center; background: #f4f7f6; padding-top: 15%; color: #333; }
         .container { max-width: 400px; margin: 0 auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #008080; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
-        .btn { display: inline-block; padding: 12px 24px; background: #008080; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px; }
+        .btn { display: inline-block; padding: 12px 24px; background: #008080; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px; border: none; cursor: pointer; width: 100%; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -16,29 +16,44 @@
 
     <div class="container">
         <h2>מערכת התרומות של חיים הקשר</h2>
-        <p>מיד תועבר לדף התשלום המאובטח...</p>
+        <p>מעביר אותך אוטומטית לדף התרומה המאובטח...</p>
         <div class="spinner"></div>
-        <button onclick="submitForm()" class="btn">לחץ כאן אם לא הועברת אוטומטית</button>
+        <button onclick="openDonation()" class="btn">לחץ כאן למעבר מיידי</button>
     </div>
 
-    <form id="bypassForm" action="https://www.matara.pro/nedarimplus/online/MatchPlus.aspx" method="GET" style="display:none;">
-        <input type="hidden" name="Action" value="SearchGroupe">
-        <input type="hidden" name="MosadId" value="4001236">
-        <input type="hidden" name="mosad" value="4001236">
-        <input type="hidden" name="Id" value="14">
-        <input type="hidden" name="GroupeId" value="14">
-        <input type="hidden" name="R" value="14">
-    </form>
-
     <script>
-        function submitForm() {
-            document.getElementById('bypassForm').submit();
+        var targetUrl = "https://www.matara.pro/nedarimplus/online/?mosad=4001236";
+        
+        function openDonation() {
+            // פתיחת האתר של נדרים פלוס בחלון חדש/לשונית חדשה
+            var donationWindow = window.open(targetUrl, '_blank');
+            
+            // יצירת סקריפט אוטומציה שמחכה לטעינת ה-DOM של נדרים פלוס ומבצע את הלחיצה בשבילו!
+            if (donationWindow) {
+                var checkExist = setInterval(function() {
+                    try {
+                        // איתור האלמנט של חיים הקשר בתוך ה-DOM של החלון החדש
+                        var matrimElement = donationWindow.document.getElementById('Matrim14');
+                        if (matrimElement) {
+                            matrimElement.click(); // לחיצה אוטומטית!
+                            clearInterval(checkExist);
+                        }
+                    } catch (e) {
+                        // אם הדפדפן עדיין חוסם בגלל שלבי טעינה, נמשיך לנסות עד שהעמוד יתייצב
+                    }
+                }, 100);
+
+                // הגבלת זמן לניסיונות האוטומציה (מקסימום 6 שניות) כדי לא להעמיס
+                setTimeout(function() {
+                    clearInterval(checkExist);
+                }, 6000);
+            }
         }
 
-        // שליחה אוטומטית של הטופס חצי שנייה אחרי טעינת העמוד
+        // הפעלה אוטומטית של התהליך שנייה אחרי שהתורם נכנס ללינק הגיטהאב שלך
         setTimeout(function() {
-            submitForm();
-        }, 600);
+            openDonation();
+        }, 1000);
     </script>
 
 </body>
