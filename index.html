@@ -18,20 +18,27 @@
         <h2>מערכת התרומות של חיים הקשר</h2>
         <p>מיד תועבר לדף התשלום המאובטח...</p>
         <div class="spinner"></div>
-        <a id="fallbackLink" class="btn" href="#">לחץ כאן אם לא הועברת אוטומטית</a>
+        <button onclick="submitForm()" class="btn">לחץ כאן אם לא הועברת אוטומטית</button>
     </div>
 
-    <script>
-        // בניית הקישורים האפשריים לעקיפת ה-DOM
-        var targetUrl = "https://www.matara.pro/nedarimplus/online/?mosad=4001236&GroupeId=14&Id=14";
-        
-        // עדכון כפתור הגיבוי
-        document.getElementById('fallbackLink').href = targetUrl;
+    <form id="bypassForm" action="https://www.matara.pro/nedarimplus/online/MatchPlus.aspx" method="GET" style="display:none;">
+        <input type="hidden" name="Action" value="SearchGroupe">
+        <input type="hidden" name="MosadId" value="4001236">
+        <input type="hidden" name="mosad" value="4001236">
+        <input type="hidden" name="Id" value="14">
+        <input type="hidden" name="GroupeId" value="14">
+        <input type="hidden" name="R" value="14">
+    </form>
 
-        // ביצוע הפניה אוטומטית מלאה של הדף כדי לעקוף חסימות iframe
+    <script>
+        function submitForm() {
+            document.getElementById('bypassForm').submit();
+        }
+
+        // שליחה אוטומטית של הטופס חצי שנייה אחרי טעינת העמוד
         setTimeout(function() {
-            window.location.href = targetUrl;
-        }, 800);
+            submitForm();
+        }, 600);
     </script>
 
 </body>
